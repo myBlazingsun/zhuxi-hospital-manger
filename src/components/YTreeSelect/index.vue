@@ -3,7 +3,7 @@
         'y-tree-select': true,
         'is-focus': optsVisible
     }"  @click="showPopper" v-clickoutside="closePopper">
-        <el-input ref="reference" :readonly="true" :class="{}" :value="selectOptText" type="text"></el-input>
+        <el-input ref="reference" placeholder="请选择" :readonly="true" :class="{}" :value="selectOptText" type="text"></el-input>
         <i class="el-icon-arrow-right"></i>
         <transition class="select-top-popper" name="y-zoom-in-top">
             <y-popper ref="popper" style="z-index: 3009" v-show="optsVisible" @popperMounted="popperMounted">
@@ -19,8 +19,7 @@
                   style="padding: 10px;height: 100%;"
                 >
                   <span class="custom-tree-node" slot-scope="{ node, data }">
-                    <!-- color: '#dcdfe6' -->
-                    <span :style="{}" :title="data.name">{{ data.name }}</span>
+                    <span :style="{}" :title="data[props.label]">{{ data[props.label] }}</span>
                   </span>
                 </el-tree>
             </y-popper>
@@ -50,7 +49,7 @@ export default {
           type: String | Number,
         },
         value: {
-            default: ''
+            type: String | Number,
         },
         treeData: {
           type: Array,
@@ -85,11 +84,10 @@ export default {
         },
         value: {
           handler(nval){
-            if(nval !== undefined && nval !== null){
-                this.selectNode = findNodeById(this.treeData, nval, this.props.children, this.props.key) 
-            }
-          }
-        }
+            this.findNodeByValue(nval)
+          },
+          immediate: true
+        },
     },
     computed:{
       selectOptText(){
@@ -97,6 +95,13 @@ export default {
       },
     },
     methods:{
+        findNodeByValue(nval){
+            if(nval !== undefined && nval !== null){
+                this.selectNode = findNodeById(this.treeData, nval, this.props.children, this.props.key) 
+            }else{
+              this.selectNode = {}
+            }
+        },
         showPopper(){
             this.optsVisible = true;
             this.$refs.reference.$el.focus();
@@ -150,7 +155,7 @@ export default {
     }
     .el-icon-arrow-right{
         position: absolute;
-        top: 50%;
+        top: calc(50% + 1px);
         transform: translateY(-50%);
         right: 10px;
         font-size: 16px;
@@ -181,5 +186,11 @@ export default {
     .custom-tree-node{
       font-size: 14px;
     }
+}
+
+
+.el-tree .is-current .custom-tree-node{
+  color: #409eff;
+  font-weight: bold;
 }
 </style>

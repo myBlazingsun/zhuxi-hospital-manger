@@ -17,7 +17,7 @@ export function deleteMenu(id) {
 
 export function createMenu(data) {
   return request({
-    url: '/menu/create',
+    url: '/backstage/category/add',
     method: 'post',
     data: data
   })
@@ -25,11 +25,12 @@ export function createMenu(data) {
 
 export function updateMenu(id, data) {
   return request({
-    url: '/menu/update/' + id,
+    url: `/backstage/category/update/${id}`,
     method: 'post',
     data: data
   })
 }
+
 
 export function getMenu(id) {
   return request({
@@ -38,24 +39,13 @@ export function getMenu(id) {
   })
 }
 
-export function updateHidden(id, params) {
+export function delMenu(id, params) {
   return request({
-    url: '/menu/updateHidden/' + id,
+    url: `/backstage/category/delete/${id}`,
     method: 'post',
-    params: params
+    params,
+    headers: {
+      'content-type' : 'application/x-www-form-urlencoded'
+    }
   })
-}
-
-export function fetchTreeList() {
-  return request({
-    url: '/menu/treeList',
-    method: 'get'
-  })
-}
-
-export function getMenuConfig() {
-  return request({
-    url:"/portal/home/route",
-    method:"get",
-  });
 }

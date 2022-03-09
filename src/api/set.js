@@ -3,7 +3,7 @@ import request from '@/utils/request'
 
 export function getSetting(params) {
   return request({
-    url: '/universal-set',
+    url: '/backstage/universal-set',
     method: 'get',
     params: params
   })
@@ -12,7 +12,7 @@ export function getSetting(params) {
 
 export function setSetting(data) {
   return request({
-    url: '/universal-set',
+    url: '/backstage/universal-set',
     method: 'put',
     data: data,
   })

@@ -2,7 +2,7 @@ import request from '@/utils/request'
 
 export function login(username, password) {
   return request({
-    url: '/admin/login',
+    url: '/backstage/admin/login',
     method: 'post',
     data: {
       username,
@@ -13,21 +13,21 @@ export function login(username, password) {
 
 export function getInfo() {
   return request({
-    url: '/admin/info',
+    url: '/backstage/admin/info',
     method: 'get',
   })
 }
 
 export function logout() {
   return request({
-    url: '/admin/logout',
+    url: '/backstage/admin/logout',
     method: 'post'
   })
 }
 
 export function fetchList(params) {
   return request({
-    url: '/admin/list',
+    url: '/backstage/admin/list',
     method: 'get',
     params: params
   })
@@ -35,7 +35,7 @@ export function fetchList(params) {
 
 export function createAdmin(data) {
   return request({
-    url: '/admin/register',
+    url: '/backstage/admin/register',
     method: 'post',
     data: data
   })
@@ -43,7 +43,7 @@ export function createAdmin(data) {
 
 export function updateAdmin(id, data) {
   return request({
-    url: '/admin/update/' + id,
+    url: '/backstage/admin/update/' + id,
     method: 'post',
     data: data
   })
@@ -51,7 +51,7 @@ export function updateAdmin(id, data) {
 
 export function updateStatus(id, params) {
   return request({
-    url: '/admin/updateStatus/' + id,
+    url: '/backstage/admin/updateStatus/' + id,
     method: 'post',
     params: params
   })
@@ -59,21 +59,21 @@ export function updateStatus(id, params) {
 
 export function deleteAdmin(id) {
   return request({
-    url: '/admin/delete/' + id,
+    url: '/backstage/admin/delete/' + id,
     method: 'post'
   })
 }
 
 export function getRoleByAdmin(id) {
   return request({
-    url: '/admin/role/' + id,
+    url: '/backstage/admin/role/' + id,
     method: 'get'
   })
 }
 
 export function allocRole(data) {
   return request({
-    url: '/admin/role/update',
+    url: '/backstage/admin/role/update',
     method: 'post',
     data: data
   })

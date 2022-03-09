@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import { getMenuConfig } from '@/api/menu'
 
 
 Vue.use(Router)
@@ -20,8 +19,6 @@ import Layout from '../views/layout/Layout'
     icon: 'svg-name'             the icon show in the sidebar,
   }
  **/
-
-const menus = getMenuConfig();
 export const constantRouterMap = [
   { path: '/login', component: () => import('@/views/login/index'), hidden: true },
   { path: '/404', component: () => import('@/views/404'), hidden: true },
@@ -37,32 +34,28 @@ export const constantRouterMap = [
   //   }]
   // }
   {
-    path: '/articles',
+    path: '/content',
     component: Layout,
-    redirect: '/articles/index',
-    name: 'articles',
-    meta: { title: '文章管理', icon: 'articles' },
+    redirect: '',
+    meta: { title: '内容管理', icon: 'content' },
     children: [
       {
-        path: 'index',
-        name: 'articles-index',
-        component: () => import('@/views/articles/index'),
-        meta: { title: '文章管理', icon: 'articles-index' }
+        path: 'articles',
+        name: 'articles',
+        component: () => import('@/views/content/articles'),
+        meta: { title: '文章管理', icon: 'articles' }
       },
-    ]
-  },
-  {
-    path: '/menu',
-    component: Layout,
-    redirect: '/menu/index',
-    name: 'menu',
-    meta: { title: '栏目管理', icon: 'menu' },
-    children: [
       {
-        path: 'index',
-        name: 'menu-index',
-        component: () => import('@/views/menu/index'),
-        meta: { title: '栏目管理', icon: 'menu-index' }
+        path: 'menu',
+        name: 'menu',
+        component: () => import('@/views/content/menu'),
+        meta: { title: '栏目管理', icon: 'menu' }
+      },
+      {
+        path: 'carousel',
+        name: 'carousel',
+        component: () => import('@/views/content/carousel'),
+        meta: { title: '轮播管理', icon: 'carousel' }
       },
     ]
   },

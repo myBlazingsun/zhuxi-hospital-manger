@@ -1,10 +1,12 @@
 import request from '@/utils/request'
 
 
-export function getMenuTree(params) {
+export function getMenuTree(id) {
   return request({
-    url:'/portal/home/route',
+    url:`/backstage/category/list-with-child/${id || '0'}`,
     method:'get',
-    params:params
+    headers: {
+      'content-type' : 'application/x-www-form-urlencoded'
+    }
   })
 }

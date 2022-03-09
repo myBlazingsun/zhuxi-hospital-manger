@@ -1,5 +1,5 @@
 <template>
-  <div class="app-container">
+  <div class="app-container articles-content">
     <div class="left-tree">
       <el-scrollbar style="height: 100%;">
         <el-tree
@@ -14,10 +14,6 @@
           @node-click="handleNodeClick"
           style="padding: 10px;height: 100%;"
         >
-          <span class="custom-tree-node" slot-scope="{ node, data }">
-            <!-- color: '#dcdfe6' -->
-            <span :style="{}" :title="data.name">{{ data.name }}</span>
-          </span>
         </el-tree>
       </el-scrollbar>
     </div>
@@ -40,14 +36,9 @@
         </div>
         <div style="margin-top: 15px">
           <el-form :inline="true" :model="listQuery" size="small" label-width="140px">
-            <el-form-item label="输入搜索：">
-              <el-input
-                style="width: 203px"
-                @keydown.native.enter="handleSearchList"
-                v-model="listQuery.keyword"
-                placeholder="文章标题"
-              ></el-input>
-            </el-form-item>
+            <!-- <el-form-item label="输入搜索：">
+              <el-input v-model="listQuery.keyword" @keydown.native.enter="handleSearchList" class="input-width" placeholder="请输入关键词" clearable></el-input>
+            </el-form-item> -->
           </el-form>
         </div>
       </el-card>
@@ -69,41 +60,23 @@
           <el-table-column label="编号" width="100" align="center">
             <template slot-scope="scope">{{ scope.row.id }}</template>
           </el-table-column>
-          <el-table-column label="商品图片" width="120" align="center">
+          <el-table-column label="栏目名" align="center">
             <template slot-scope="scope">
-              <img style="height: 80px" :src="scope.row.pic" />
+              <p>{{ scope.row.contentTitle }}</p>
             </template>
           </el-table-column>
-          <el-table-column label="商品名称" align="center">
+          <el-table-column label="作者" align="center">
             <template slot-scope="scope">
-              <p>{{ scope.row.name }}</p>
+              <p>{{ scope.row.contentAuthor }}</p>
             </template>
           </el-table-column>
-          <el-table-column label="商品分类" align="center">
-            <template slot-scope="scope">
-              <p>{{ scope.row.productCategoryName }}</p>
-            </template>
-          </el-table-column>
-          <el-table-column label="标签" width="140" align="center">
-            <template slot-scope="scope">
-              <p>
-                推荐：
-                <el-switch
-                  @change="handleRecommendStatusChange(scope.$index, scope.row)"
-                  :active-value="1"
-                  :inactive-value="0"
-                  v-model="scope.row.recommandStatus"
-                ></el-switch>
-              </p>
-            </template>
-          </el-table-column>
-          <el-table-column label="排序" width="100" align="center">
-            <template slot-scope="scope">{{ scope.row.sort }}</template>
+          <el-table-column label="自定义排序" width="100" align="center">
+            <template slot-scope="scope">{{ scope.row.contentSort }}</template>
           </el-table-column>
           <el-table-column label="操作" width="160" align="center">
             <template slot-scope="scope">
               <p>
-                <el-button size="mini" @click="handleUpdateProduct(scope.$index, scope.row)">编辑</el-button>
+                <el-button size="mini" @click="handleUpdate(scope.$index, scope.row)">编辑</el-button>
                 <el-button
                   size="mini"
                   type="danger"
@@ -148,50 +121,69 @@
 
     <el-dialog :close-on-click-modal="false" :title="(isEdit ? '编辑': '新增') + '文章'" :visible.sync="dialogVisible" width="900">
       <el-form :model="detail" ref="form" :rules="formRules" label-width="150px" size="small" >
-        <el-form-item label="文章标题" prop="title">
-          <el-input v-model="detail.title" :clearable="true" placeholder="请输入文章标题"></el-input>
+        <el-row>
+          <el-col :span="12">
+             <el-form-item label="文章标题" prop="contentTitle">
+              <el-input v-model="detail.contentTitle" :clearable="true" placeholder="请输入文章标题"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+             <el-form-item label="所属栏目" prop="categoryId">
+                <y-tree-select
+                  style="width: 100%"
+                  v-model="detail.categoryId"
+                  :disable-branch-nodes="true"
+                  :props="defaultProps"
+                  :treeData="treeData"
+                  :initialValue="detail.categoryId"
+                  placeholder="请选择"
+                ></y-tree-select>
+              </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="发布时间" prop="contentDatetime">
+              <el-date-picker
+                v-model="detail.contentDatetime"
+                placeholder="请选择发布时间"
+                start-placeholder
+                end-placeholder
+                :clearable="true"
+                format="yyyy-MM-dd HH:mm:ss"
+                value-format="yyyy-MM-dd HH:mm:ss"
+                type="datetime"
+              ></el-date-picker>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="关键字" prop="contentKeyword">
+              <el-input v-model="detail.contentKeyword" :clearable="true" placeholder="请输入"></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-form-item label="自定义顺序" prop="contentSort">
+          <el-input-number v-model="detail.contentSort" controls-position=""></el-input-number>
         </el-form-item>
-        <el-form-item label="封面图片：" prop="coverImg" :class="[]">
+        <el-form-item label="缩略图：" prop="contentImg" :class="[]">
           <single-upload v-model="detail.coverImg" style="width: 300px;display: inline-block;margin-left: 10px"></single-upload>
         </el-form-item>
-        <el-form-item label="所属栏目" prop="cateId">
-          <y-tree-select
-            v-model="detail.cateId"
-            :disable-branch-nodes="true"
-            :props="defaultProps"
-            :treeData="treeData"
-            :initialValue="detail.cateId"
-            placeholder="请选择"
-          ></y-tree-select>
+        <el-form-item label="文章描述" prop="contentDescription">
+          <el-input v-model="detail.contentDescription" :clearable="true" placeholder="请输入"></el-input>
         </el-form-item>
-        <el-form-item label="发布时间" prop="createTime">
-          <el-date-picker
-            v-model="detail.createTime"
-            placeholder="请选择发布时间"
-            start-placeholder
-            end-placeholder
-            :clearable="true"
-            format="yyyy-MM-dd HH:mm:ss"
-            value-format="yyyy-MM-dd HH:mm:ss"
-            type="datetime"
-          ></el-date-picker>
-        </el-form-item>
-        <el-form-item label="文章简介" prop="intro">
-          <el-input v-model="detail.intro" :clearable="true" placeholder="请输入文章标题"></el-input>
-        </el-form-item>
-         <el-form-item label="详情：" prop="content">
-          <YEditor :initalValue="detail.initalContent"  v-model="detail.content"  @input="editorChange"></YEditor>
+         <el-form-item label="详情：" prop="contentDetails">
+          <YEditor :initalValue="detail.initalContent"  v-model="detail.contentDetails"  @input="editorChange"></YEditor>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="carouselDialogVisible = false" size="small">取 消</el-button>
-        <el-button type="primary" @click="addToNewsCarousel()" size="small">确 定</el-button>
+        <el-button @click="dialogVisible = false" size="small">取 消</el-button>
+        <el-button type="primary" @click="handleDialogConfirm()" size="small">确 定</el-button>
       </span>
     </el-dialog>
   </div>
 </template>
 <script>
-import { fetchArticlesList, getArticlesById } from "@/api/articles";
+import { fetchArticlesList, getArticlesById, addArticles, updateArticles, delArticles} from "@/api/articles";
 import { getMenuTree } from "@/api/common";
 import SingleUpload from '@/components/Upload/singleUpload'
 import YEditor from '@/components/YEditor'
@@ -201,16 +193,19 @@ const defaultListQuery = {
   keyword: null,
   pageNum: 1,
   pageSize: 10,
-  cateId: null
+  categoryId: null
 };
 
 const defaultDetail = {
-  title: null,
-  createTime: null,
-  cateId: null,
-  content: null,
-  intro: null,
-  coverImg: null
+  contentTitle: null,//标题
+  contentDatetime: null,//发布时间
+  categoryId: null,
+  contentDescription: null,//描述
+  contentDetails: null,//内容
+  initalContent: null,//初始内容值
+  contentKeyword: null,//关键字
+  contentImg: null,//缩略图
+  contentSort: null,
 }
 export default {
   name: "Articles",
@@ -220,9 +215,24 @@ export default {
       defaultProps: {
         children: "childs",
         key: "id",
-        label: "name"
+        label: "categoryTitle"
       },
-      treeData: [],
+      treeData: [
+        {
+          categoryTitle: '',
+          categoryId: 0,
+          id: 0,
+          level:1,
+          childs: [
+            {
+              level: 2,
+              categoryId: null,
+              categoryTitle:'',
+              id: 2
+            }
+          ],
+        }
+      ],
       treeLoading: false,
       emptyText: "",
       operates: [
@@ -250,19 +260,12 @@ export default {
       isEdit: false,
       detail: Object.assign({}, defaultDetail),
       formRules: {
-        title:  {required: true, trigger: 'blur', message: '请输入标题'},
-        createTime:  {required: true, trigger: 'blur', message: '请输入时间'},
-        coverImg: [
-          {required: true, message: '请上传封面图片', trigger: 'blur'},
-        ],
-        cateId: [
+        contentTitle:  {required: true, trigger: 'blur', message: '请输入标题'},
+        contentDatetime:  {required: true, trigger: 'blur', message: '请输入时间'},
+        categoryId: [
           {required: true, message: '请选择栏目', trigger: 'blur'},
         ],
-        intro:  [
-          {required: true, trigger: 'blur', message: '请输入简介'},
-          {min: 2, max: 5000, message: '长度在 2 到 5000 个字符', trigger: 'blur'}
-        ],
-        content:  [
+        contentDetails:  [
           {required: true, trigger: 'blur', message: '请输入详情'},
           {min: 2, max: 5000, message: '长度在 2 到 1000 个字符', trigger: 'blur'}
         ],
@@ -292,7 +295,7 @@ export default {
       this.getList()
     },
     editorChange(contentHmtl, eventName) {
-      this.curDetail.content = contentHmtl;
+      this.detail.contentDetails = contentHmtl;
       console.log(eventName);
     },
     getTreeList: function () {
@@ -333,7 +336,7 @@ export default {
       getArticlesById(row.id).then(res=> {
         this.detail = Object.assign({}, {
           ...res.data,
-          initalContent: res.data.content
+          initalContent: res.data.contentDetails
         });
         this.$nextTick(()=> {
           this.$refs.form.clearValidate()
@@ -424,9 +427,6 @@ export default {
         this.getList();
       });
     },
-    handleUpdateProduct(index, row) {
-      this.$router.push({ path: "/pms/updateProduct", query: { id: row.id } });
-    },
     updateRecommendStatus(recommendStatus, ids) {
       let params = new URLSearchParams();
       params.append("ids", ids);
@@ -443,7 +443,7 @@ export default {
       let params = new URLSearchParams();
       params.append("ids", ids);
       params.append("deleteStatus", deleteStatus);
-      updateDeleteStatus(params).then(response => {
+      delArticles(params).then(response => {
         this.$message({
           message: "删除成功",
           type: "success",
@@ -451,18 +451,52 @@ export default {
         });
       });
       this.getList();
-    }
+    },
+    handleDialogConfirm() {
+      this.$refs.form.validate(valid=> {
+        if(valid){
+          this.$confirm('是否要确认?', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+            if (this.isEdit) {
+              updateArticles(this.detail.id, this.detail).then(response => {
+                this.$message({
+                  message: '修改成功！',
+                  type: 'success'
+                });
+                this.dialogVisible = false;
+                this.getList();
+              })
+            } else {
+              addArticles(this.detail).then(response => {
+                this.$message({
+                  message: '添加成功！',
+                  type: 'success'
+                });
+                this.dialogVisible = false;
+                this.getList();
+              })
+            }
+          })
+        }
+      })
+    },
   }
 };
 </script>
 
 <style lang="scss">
-.app-container {
+.articles-content {
   display: flex;
   justify-content: space-between;
   .left-tree {
     width: 200px;
     margin-right: 20px;
+    .el-scrollbar__wrap{
+      overflow-x: hidden;
+    }
     .custom-tree-node {
       font-size: 14px;
     }

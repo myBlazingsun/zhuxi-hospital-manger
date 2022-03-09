@@ -1,10 +1,10 @@
 <template>
-  <!-- 分类轮播管理 -->
+  <!-- 首页轮播管理 -->
   <div class="app-container carousel-index">
     <el-card class="operate-container" shadow="never">
       <i class="el-icon-tickets"></i>
       <span>数据列表</span>
-      <!-- <el-button size="mini" class="btn-add" @click="handleAdd()" style="margin-left: 20px">添加</el-button> -->
+      <el-button size="mini" class="btn-add" @click="handleAdd()" style="margin-left: 20px">添加</el-button>
     </el-card>
     <div class="table-container">
       <el-table ref="adminTable" :data="list" style="width: 100%;" v-loading="listLoading" border>
@@ -38,17 +38,15 @@
       <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" layout="total, sizes,prev, pager, next,jumper" :current-page.sync="listQuery.pageNum" :page-size="listQuery.pageSize" :page-sizes="[10,15,20]" :total="total">
       </el-pagination>
     </div>
-
-
     <el-dialog :close-on-click-modal="false" :title="isEdit?'编辑轮播':'添加轮播'" :visible.sync="dialogVisible" width="900">
       <el-form :model="carouselDetail" ref="mainForm" :rules="formRules" label-width="150px" size="small">
         <el-form-item label="图片：" prop="pic" :class="[]">
-          <single-upload :disabled="true" v-model="carouselDetail.pic" style="width: 300px;display: inline-block;margin-left: 10px"></single-upload>
+          <single-upload v-model="carouselDetail.pic" style="width: 300px;display: inline-block;margin-left: 10px"></single-upload>
         </el-form-item>
         <el-form-item label="排序：" prop="sort">
           <el-input v-model="carouselDetail.sort" style="width: 250px"></el-input>
         </el-form-item>
-        <el-form-item label="商品推荐：">
+        <el-form-item label="上下线状态：">
           <el-switch
             v-model="carouselDetail.status"
             :active-value="1"
@@ -69,7 +67,7 @@
 <script>
 import SingleUpload from '@/components/Upload/singleUpload'
 
-import { fetchList, addIndexCarousel, updateIndexCarousel, modifyStatus, delIndexCarousel } from '@/api/carousel'
+import { fetchList, addIndexCarousel, updateIndexCarousel, getCarousel, modifyStatus, delIndexCarousel } from '@/api/carousel'
 import { formatDate } from '@/utils/date';
 
 const defaultListQuery = {
@@ -95,7 +93,7 @@ export default {
       isEdit: false,
       dataList: [],
       formDisabled: true,
-      carouselDetail: defaultCarouselDetail,
+      carouselDetail: Object.assign({}, defaultCarouselDetail),
       formRules: {
         pic: [
           {required: true, message: '请上传图片', trigger: 'blur'},
@@ -217,7 +215,7 @@ export default {
     },
     getList() {
       this.listLoading = true;
-      fetchList({...this.listQuery, type: 2}).then(response => {
+      fetchList({...this.listQuery, type: 1}).then(response => {
         this.listLoading = false;
         this.list = response.data.list;
         this.total = response.data.total
