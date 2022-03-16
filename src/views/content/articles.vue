@@ -62,7 +62,7 @@
           </el-table-column>
           <el-table-column label="栏目名" align="center">
             <template slot-scope="scope">
-              <p>{{ scope.row.contentTitle }}</p>
+              <p>{{ scope.row.categoryTitle }}</p>
             </template>
           </el-table-column>
           <el-table-column label="作者" align="center">
@@ -260,10 +260,13 @@ export default {
       isEdit: false,
       detail: Object.assign({}, defaultDetail),
       formRules: {
-        contentTitle:  {required: true, trigger: 'blur', message: '请输入标题'},
-        contentDatetime:  {required: true, trigger: 'blur', message: '请输入时间'},
+        // contentTitle:  {required: true, trigger: 'blur', message: '请输入标题'},
+        // contentDatetime:  {required: true, trigger: 'blur', message: '请输入时间'},
         categoryId: [
           {required: true, message: '请选择栏目', trigger: 'blur'},
+        ],
+        contentDescription: [
+          {required: true, message: '请输入文章描述', trigger: 'blur'},
         ],
         contentDetails:  [
           {required: true, trigger: 'blur', message: '请输入详情'},
@@ -291,7 +294,7 @@ export default {
   },
   methods: {
     handleNodeClick(node){
-      this.listQuery.cateId = node.id;
+      this.listQuery.categoryId = node.id;
       this.getList()
     },
     editorChange(contentHmtl, eventName) {
