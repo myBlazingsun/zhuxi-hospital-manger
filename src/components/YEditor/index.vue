@@ -3,7 +3,6 @@
     <div id="editor" class="showContent">
       <!--回显的内容，库中查出来的放这-->
       <!--可以直接在指定元素内加入文本或者html标签-->
-      哈哈哈哈
     </div>
     <input type="file" @change="updateImg($event)" id="imgData" style="display: none;">
     <input id="uploadVideo" type="file" style="display:none" accept="video/*" @change="uploadVideo">

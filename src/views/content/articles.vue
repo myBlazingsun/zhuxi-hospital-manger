@@ -166,7 +166,7 @@
           <el-input-number v-model="detail.contentSort" controls-position=""></el-input-number>
         </el-form-item>
         <el-form-item label="缩略图：" prop="contentImg" :class="[]">
-          <single-upload v-model="detail.coverImg" style="width: 300px;display: inline-block;margin-left: 10px"></single-upload>
+          <single-upload v-model="detail.contentImg" style="width: 300px;display: inline-block;margin-left: 10px"></single-upload>
         </el-form-item>
         <el-form-item label="文章描述" prop="contentDescription">
           <el-input v-model="detail.contentDescription" :clearable="true" placeholder="请输入"></el-input>
@@ -202,7 +202,7 @@ const defaultDetail = {
   categoryId: null,
   contentDescription: null,//描述
   contentDetails: null,//内容
-  initalContent: null,//初始内容值
+  initalContent: '请输入内容',//初始内容值
   contentKeyword: null,//关键字
   contentImg: null,//缩略图
   contentSort: null,
