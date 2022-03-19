@@ -162,9 +162,18 @@
             </el-form-item>
           </el-col>
         </el-row>
-        <el-form-item label="自定义顺序" prop="contentSort">
-          <el-input-number v-model="detail.contentSort" controls-position=""></el-input-number>
-        </el-form-item>
+        <el-row>
+        <el-col :span="12">
+          <el-form-item label="自定义顺序" prop="contentSort">
+            <el-input-number v-model="detail.contentSort" controls-position=""></el-input-number>
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="作者" prop="contentKeyword">
+            <el-input v-model="detail.contentAuthor" :clearable="true" placeholder="请输入"></el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
         <el-form-item label="缩略图：" prop="contentImg" :class="[]">
           <single-upload v-model="detail.contentImg" style="width: 300px;display: inline-block;margin-left: 10px"></single-upload>
         </el-form-item>
@@ -206,6 +215,7 @@ const defaultDetail = {
   contentKeyword: null,//关键字
   contentImg: null,//缩略图
   contentSort: null,
+  contentAuthor: null,//作者
 }
 export default {
   name: "Articles",
