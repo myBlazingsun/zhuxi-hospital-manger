@@ -222,6 +222,7 @@ export default {
     getList: function () {
       this.treeLoading = true;
       getMenuTree().then(res => {
+        let opts = [];
         if (res && res.data.length) {
           walkTree(res.data, 'childs', 1, null, (node, level, parent)=> {
             node.level = level
@@ -233,15 +234,16 @@ export default {
               delete node.childs
             }
           })
-          opts.unshift({
-            categoryTitle: '无上级栏目',
-            id: 0,
-            categoryId: 0,
-          })
-          this.$set(this, "cateOptsTree", opts);
-          console.log(this.treeData);
-          console.log(this.opts);
+          
         }
+        opts.unshift({
+          categoryTitle: '无上级栏目',
+          id: 0,
+          categoryId: 0,
+        })
+        this.$set(this, "cateOptsTree", opts);
+        console.log(this.treeData);
+        console.log(this.opts);
       }).finally(() => {
         this.treeLoading = false;
       });
