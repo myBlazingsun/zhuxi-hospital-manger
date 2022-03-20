@@ -16,6 +16,7 @@
                   :data="treeData"
                   :props="props"
                   @node-click="handleNodeClick"
+                  :current-node-key="value"
                   style="padding: 10px;height: 100%;"
                 >
                   <span class="custom-tree-node" slot-scope="{ node, data }">

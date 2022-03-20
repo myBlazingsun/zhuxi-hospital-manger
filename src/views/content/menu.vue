@@ -8,7 +8,7 @@
     <div class="table-container">
       <el-table
         ref="table"
-        :data="treeData"
+        :data="menuTree"
         @selection-change="handleSelectionChange"
         v-loading="treeLoading"
         style="width: 100%;margin-bottom: 20px;"
@@ -81,7 +81,7 @@
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="carouselDialogVisible = false" size="small">取 消</el-button>
+        <el-button @click="dialogVisible = false" size="small">取 消</el-button>
         <el-button type="primary" @click="handleDialogConfirm()" size="small">确 定</el-button>
       </span>
     </el-dialog>
@@ -118,7 +118,7 @@ export default {
         key: "id",
         label: "categoryTitle"
       },
-      treeData:[
+      menuTree:[
         {
           categoryTitle: '',
           categoryId: 0,
@@ -227,22 +227,22 @@ export default {
           walkTree(res.data, 'childs', 1, null, (node, level, parent)=> {
             node.level = level
           })
-          this.$set(this, "treeData", res.data);
-          let opts = JSON.parse(JSON.stringify(res.data))
-          walkTree(opts, 'childs', 1, null, (node, level, parent)=> {
-            if(level>2){
-              delete node.childs
-            }
-          })
-          
+          opts = JSON.parse(JSON.stringify(res.data))
         }
-        opts.unshift({
+        this.$set(this, "menuTree", opts);
+        let cateOpts = JSON.parse(JSON.stringify(opts))
+        cateOpts.unshift({
           categoryTitle: '无上级栏目',
           id: 0,
           categoryId: 0,
         })
-        this.$set(this, "cateOptsTree", opts);
-        console.log(this.treeData);
+        walkTree(cateOpts, 'childs', 1, null, (node, level, parent)=> {
+          if(level>2){
+            delete node.childs
+          }
+        })
+        this.$set(this, "cateOptsTree", cateOpts);
+        console.log(this.menuTree);
         console.log(this.opts);
       }).finally(() => {
         this.treeLoading = false;
