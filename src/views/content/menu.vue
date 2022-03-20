@@ -17,14 +17,14 @@
         default-expand-all
         :tree-props="{children: 'childs', hasChildren: 'hasChildren'}">
         <el-table-column type="selection" width="60" align="center"></el-table-column>
-        <el-table-column label="编号" width="100" align="center">
-          <template slot-scope="scope">{{ scope.row.id }}</template>
+        <el-table-column label="排序" width="150" align="left">
+          <template slot-scope="scope">{{ scope.row.categorySort }}</template>
         </el-table-column>
         <el-table-column label="栏目名称" align="center">
           <template slot-scope="scope">{{ scope.row.categoryTitle }}</template>
         </el-table-column>
-        <el-table-column label="排序" width="100" align="center">
-          <template slot-scope="scope">{{ scope.row.categorySort }}</template>
+        <el-table-column label="编号" width="100" align="center">
+          <template slot-scope="scope">{{ scope.row.id }}</template>
         </el-table-column>
         <el-table-column label="操作" align="center">
           <template slot-scope="scope">

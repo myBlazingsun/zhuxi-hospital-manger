@@ -65,6 +65,9 @@
               <p>{{ scope.row.categoryTitle }}</p>
             </template>
           </el-table-column>
+          <el-table-column label="栏目名称" align="center">
+            <template slot-scope="scope">{{ scope.row.contentTitle }}</template>
+          </el-table-column>
           <el-table-column label="作者" align="center">
             <template slot-scope="scope">
               <p>{{ scope.row.contentAuthor }}</p>
