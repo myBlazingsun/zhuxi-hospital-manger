@@ -221,7 +221,7 @@ export default {
       formData.append('file', filterFile);        //追加的自定义节点，第一个参数：php用$_FILES接收时的key；第2个参数：当前图片
 
       request({
-        url: '/minio/upload',
+        url: '/backstage/minio/upload',
         method: 'post',
         data: formData,
         headers: {
