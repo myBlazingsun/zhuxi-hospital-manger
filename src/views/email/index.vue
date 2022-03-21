@@ -44,7 +44,7 @@
         </el-table-column>
         <el-table-column label="操作" width="280" align="center">
           <template slot-scope="scope">
-            <el-button v-if="scope.row.isShow" size="mini" type="text" @click="handleUpdate(scope.$index, scope.row)">审核</el-button>
+            <el-button v-if="!scope.row.isShow" size="mini" type="text" @click="handleUpdate(scope.$index, scope.row)">审核</el-button>
             <el-button size="mini" type="text" @click="handleDelete(scope.$index, scope.row)">删除
             </el-button>
           </template>
@@ -132,11 +132,11 @@
 
       <el-form :model="replyInfo" ref="replyForm" :rules="replyFormRule" label-width="150px" size="small">
         <el-form-item label="回复：" prop="pic" :class="[]">
-           <el-input type="textarea" class="input-content"  :autosize="{ minRows: 6, maxRows: 6}" v-model="detail.reply" style="width: 100%;"></el-input>
+           <el-input type="textarea" class="input-content"  :autosize="{ minRows: 6, maxRows: 6}" v-model="replyInfo.reply" style="width: 100%;"></el-input>
         </el-form-item>
         <el-form-item label="设为前台展示：">
           <el-switch
-            v-model="detail.isShow"
+            v-model="replyInfo.isShow"
             :active-value="1"
             :active-text="'展示'"
             :inactive-value="0"
@@ -146,7 +146,7 @@
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false" size="small">取 消</el-button>
-        <el-button type="primary" @click="handleDialogConfirm()" size="small">确 定</el-button>
+        <el-button type="primary" @click="handleReply()" size="small">确 定</el-button>
       </span>
     </el-dialog>
 
@@ -268,6 +268,7 @@ export default {
           ...res.data,
           initalContent: res.data.content
         });
+        this.replyInfo = Object.assign({}, defaultReply)
         this.$nextTick(()=> {
           this.$refs.form.clearValidate()
           this.$refs.replyForm.clearValidate()
