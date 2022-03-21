@@ -59,6 +59,21 @@ export const constantRouterMap = [
       },
     ]
   },
+  {
+    path: '/email',
+    component: Layout,
+    redirect: '/email/index',
+    name: 'email',
+    meta: { title: '院长信箱', icon: 'email' },
+    children: [
+      {
+        path: 'index',
+        name: 'email-index',
+        component: () => import('@/views/email'),
+        meta: { title: '院长信箱', icon: 'email-universal' }
+      },
+    ]
+  },
 ]
 
 //超管独有路由
@@ -96,7 +111,7 @@ export const asyncRouterMap = [
     ]
   },
 
-
+  
   { path: '*', redirect: '/404', hidden: true },
   { path: '/', redirect: '/set/universal' },
 ]

@@ -14,7 +14,7 @@
         style="width: 100%;margin-bottom: 20px;"
         row-key="id"
         border
-        default-expand-all
+        :default-expand-all="false"
         :tree-props="{children: 'childs', hasChildren: 'hasChildren'}">
         <el-table-column type="selection" width="60" align="center"></el-table-column>
         <el-table-column label="排序" width="150" align="left">

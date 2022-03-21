@@ -6,12 +6,11 @@
         <el-input ref="reference" placeholder="请选择" :readonly="true" :class="{}" :value="selectOptText" type="text"></el-input>
         <i class="el-icon-arrow-right"></i>
         <transition class="select-top-popper" name="y-zoom-in-top">
-            <y-popper ref="popper" style="z-index: 3009" v-show="optsVisible" @popperMounted="popperMounted">
+            <y-popper class="tree-select-poper" ref="popper" style="z-index: 3009" v-show="optsVisible" @popperMounted="popperMounted">
                 <el-tree
                   :indent="5"
                   highlight-current
                   :expand-on-click-node="false"
-                  default-expand-all
                   :empty-text="emptyText"
                   :data="treeData"
                   :props="props"
@@ -142,6 +141,10 @@ export default {
 </script>
 
 <style lang="scss">
+.tree-select-poper{
+  max-height: 500px;
+  overflow-y: scroll;
+}
 .y-tree-select{
     display: inline-block;
     width: 200px;
