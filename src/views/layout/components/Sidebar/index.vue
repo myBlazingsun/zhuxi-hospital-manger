@@ -30,7 +30,7 @@ export default {
   data(){
     return {
       logo: '',
-      openeds: ['1']
+      openeds: ['/content']
     }
   },
   computed: {

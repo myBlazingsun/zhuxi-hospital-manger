@@ -3,6 +3,7 @@
     <div class="left-tree">
       <el-scrollbar style="height: 100%;">
         <el-tree
+          ref="filterTree"
           :indent="5"
           v-loading="treeLoading"
           highlight-current
@@ -12,6 +13,7 @@
           :data="treeData"
           :props="defaultProps"
           @node-click="handleNodeClick"
+          :filter-node-method="filterNode"
           style="padding: 10px;height: 100%;"
         >
         </el-tree>
@@ -200,6 +202,7 @@ import { getMenuTree } from "@/api/common";
 import SingleUpload from '@/components/Upload/singleUpload'
 import YEditor from '@/components/YEditor'
 import YTreeSelect from '@/components/YTreeSelect'
+import { walkTree } from '@/utils/common'
 
 const defaultListQuery = {
   keyword: null,
@@ -225,6 +228,17 @@ export default {
   components: { SingleUpload, YEditor, YTreeSelect },
   data() {
     return {
+      nodeRender(h, { node, data, store }){
+        return h('span', {
+          attrs: {
+            class: 'node-item'
+          },
+          // domProps: {
+          //   disabled: data.categoryType == '3'
+          // },
+        }, data.categoryTitle)
+      },
+      
       defaultProps: {
         children: "childs",
         key: "id",
@@ -306,6 +320,10 @@ export default {
     }
   },
   methods: {
+    filterNode(value, data, node){
+      const hideMenus = ['地理位置', '院长信箱']
+      return !hideMenus.includes(data.categoryTitle) 
+    },
     handleNodeClick(node){
       this.listQuery.categoryId = node.id;
       this.getList()
@@ -319,7 +337,13 @@ export default {
       getMenuTree()
         .then(res => {
           if (res && res.data.length) {
+            walkTree(res.data, 'childs', 1, null, (node, level, parent)=> {
+              node.disabled = node.categoryType == '3'
+            })
             this.$set(this, "treeData", res.data);
+            this.$nextTick(()=> {
+              this.$refs.filterTree.filter()
+            })
           }
         })
         .finally(() => {

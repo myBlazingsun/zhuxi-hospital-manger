@@ -30,8 +30,9 @@
           <template slot-scope="scope">
             <p>
               <el-button v-if="scope.row.level<=2" size="mini" @click="handleAddChild(scope.$index, scope.row)">+子栏目</el-button>
-              <el-button size="mini" @click="handleUpdate(scope.$index, scope.row)">编辑</el-button>
+              <el-button v-if="scope.row.level>1" size="mini" @click="handleUpdate(scope.$index, scope.row)">编辑</el-button>
               <el-button
+                v-if="scope.row.level>1"
                 size="mini"
                 type="danger"
                 @click="handleDelete(scope.$index, scope.row)"
