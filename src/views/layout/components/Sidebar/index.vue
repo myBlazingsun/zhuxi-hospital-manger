@@ -9,6 +9,7 @@
       :show-timeout="200"
       :default-active="$route.path"
       :collapse="isCollapse"
+      :default-openeds="openeds"
       :background-color="'#ffffff'"
       text-color="#1e1e1e"
       active-text-color="#409EFF"
@@ -28,7 +29,8 @@ export default {
   components: { SidebarItem, ScrollBar },
   data(){
     return {
-      logo: ''
+      logo: '',
+      openeds: ['1']
     }
   },
   computed: {
