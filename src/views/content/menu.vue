@@ -29,8 +29,8 @@
         <el-table-column label="操作" align="center">
           <template slot-scope="scope">
             <p>
-              <el-button v-if="scope.row.level<=2" size="mini" @click="handleAddChild(scope.$index, scope.row)">+子栏目</el-button>
-              <el-button v-if="scope.row.level>1" size="mini" @click="handleUpdate(scope.$index, scope.row)">编辑</el-button>
+              <el-button v-if="scope.row.level<=2" :disabled="isDisabledAddChild(scope.row)" size="mini" @click="handleAddChild(scope.$index, scope.row)">+子栏目</el-button>
+              <el-button v-if="scope.row.level>1" :disabled="isDisabledMenu(scope.row)" size="mini" @click="handleUpdate(scope.$index, scope.row)">编辑</el-button>
               <el-button
                 v-if="scope.row.level>1"
                 size="mini"
@@ -216,6 +216,14 @@ export default {
     }
   },
   methods: {
+    isDisabledMenu(item){
+      const disabledList = ['首页', '地理位置', '院长信箱']
+      return disabledList.includes(item.categoryTitle)
+    },
+    isDisabledAddChild(item){
+      const disabledList = ['首页', '地理位置', '院长信箱']
+      return disabledList.includes(item.categoryTitle)
+    },
     editorChange(contentHmtl, eventName) {
       this.curDetail.content = contentHmtl;
       console.log(eventName);
