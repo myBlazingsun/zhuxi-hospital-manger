@@ -45,8 +45,7 @@
         <el-table-column label="操作" width="280" align="center">
           <template slot-scope="scope">
             <el-button v-if="!scope.row.isShow" size="mini" type="text" @click="handleUpdate(scope.$index, scope.row)">审核</el-button>
-            <el-button size="mini" type="text" @click="handleDelete(scope.$index, scope.row)">删除
-            </el-button>
+            <el-button v-else size="mini" type="text" @click="handleUpdate(scope.$index, scope.row, 'edit')">编辑</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -91,8 +90,8 @@
               <el-radio-group v-model="detail.sex"
               :style="{width: ''}">
                 <el-radio :style="{display: true ? 'inline-block' : 'block'}" :label="item.value"
-                          v-for='(item, index) in sexOpts' :key="item.value + index">
-                    {{true? item.label : item.value}}
+                          v-for='(item, index) in sexOpts' :key="item.value">
+                    {{item.label}}
                 </el-radio>
               </el-radio-group>
             </el-form-item>
@@ -183,8 +182,8 @@ export default {
   data() {
     return {
       sexOpts: [
-        {label: '男',value: '1'},
-        {label: '女',value: '0'},
+        {label: '男',value: 1},
+        {label: '女',value: 0},
       ],
       multipleSelection: [],
       listQuery: Object.assign({}, defaultListQuery),
@@ -206,7 +205,11 @@ export default {
       ],
       operateType: '',
       replyFormRule: {
-
+        reply: [
+          {
+            max: 300, message: '长度小于300 个字符', trigger: 'change'
+          }
+        ]
       }
     }
   },
@@ -260,7 +263,7 @@ export default {
     handleBatchOperate(){
       this[this.operateType] && this[this.operateType]()
     },
-    handleUpdate(index, row) {
+    handleUpdate(index, row, edit) {
       this.dialogVisible = true;
       this.isEdit = true;
       getEmailDetail(row.id).then(res=> {
@@ -268,12 +271,22 @@ export default {
           ...res.data,
           initalContent: res.data.content
         });
-        this.replyInfo = Object.assign({}, defaultReply)
+        if(edit){
+          this.$set(this, 'replyInfo', {
+            isShow: res.data.isShow,
+            reply: res.data.reply
+          })
+        }else{
+          this.$set(this, 'replyInfo', Object.assign({}, defaultReply))
+        }
         this.$nextTick(()=> {
           this.$refs.form.clearValidate()
           this.$refs.replyForm.clearValidate()
         })
       })
+    },
+    handleEdit(){
+
     },
     showMessage(){
       let ids = this.multipleSelection.map(item=> item.id);

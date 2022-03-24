@@ -180,7 +180,7 @@ export default {
       console.log(formData.get("avatar"));    //打印当前图片的信息
 
       request({
-        url: '/minio/upload',
+        url: '/backstage/minio/upload',
         method: 'post',
         data: formData,
         headers: {
