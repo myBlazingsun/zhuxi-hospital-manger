@@ -186,7 +186,7 @@
           <el-input v-model="detail.contentDescription" :clearable="true" placeholder="请输入"></el-input>
         </el-form-item>
          <el-form-item label="详情：" prop="contentDetails">
-          <YEditor :initalValue="detail.initalContent"  v-model="detail.contentDetails"  @input="editorChange"></YEditor>
+          <YEditor v-if="dialogVisible" :initalValue="detail.initalContent"  v-model="detail.contentDetails"  @input="editorChange"></YEditor>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">

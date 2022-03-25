@@ -95,8 +95,11 @@ export default {
   watch: {
     initalValue: {
       handler(nval) {
-        this.setContent()
-      }
+        this.$nextTick(()=> {
+          this.setContent()
+        })
+      },
+      immediate: true
     }
   },
   mounted() {
@@ -247,7 +250,10 @@ export default {
       })
     },
     setContent(){
-      quill.pasteHTML(this.initalValue)
+      quill.pasteHTML('')
+      setTimeout(()=> {
+        quill.pasteHTML(this.initalValue)
+      })
     }
   },
   destroyed() {
