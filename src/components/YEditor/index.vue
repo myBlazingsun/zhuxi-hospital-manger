@@ -5,6 +5,7 @@
       <!--可以直接在指定元素内加入文本或者html标签-->
     </div>
     <input type="file" @change="updateImg($event)" id="imgData" style="display: none;">
+    <input type="file" @change="fileUpload($event)" id="uploadfile" style="display: none;">
     <input id="uploadVideo" type="file" style="display:none" accept="video/*" @change="uploadVideo">
   </div>
 </template>
@@ -70,6 +71,25 @@ class VideoBlot extends BlockEmbed {
 VideoBlot.blotName = 'simpleVideo'
 VideoBlot.tagName = 'video'
 Quill.register(VideoBlot)
+
+var Link = Quill.import('formats/link')
+class FileBlot extends Link {
+    static create(value) {
+        let node = undefined
+        if(value && !value.href) {
+            node = super.create(value)
+        } else{
+            node = super.create(value.href)
+            node.innerText = value.innerText
+            node.download = value.innerText
+        }
+        return node
+    }
+}
+FileBlot.blotName = 'link'
+FileBlot.tagName = 'A'
+Quill.register(FileBlot)
+
 import request from '@/utils/request'
 
 let quill;
@@ -125,8 +145,10 @@ export default {
         [{ 'font': [] }],
         [{ 'align': [] }],
         ['clean'], //移除格式化
-        ['image'],
-        ['video'],
+        ["image", "video","link"],
+        // ['image'],
+        // ['video'],
+        // ["upload"],
         // ['formula'] //需要加载cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.js
       ];
 
@@ -137,10 +159,20 @@ export default {
         modules: {
           //formula: true, //公式；需要加载cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.js
           //syntax: true,  //高亮；需要加载cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js
-          /*toolbar: {
-              container:"#editor_header"
-          }*/ // 或者 toolbar :'#editor_header'
-          toolbar: toolbarOptions  //指定编辑器操作条
+          toolbar: {
+              container: toolbarOptions,
+              handlers: {
+                image(){
+                  document.getElementById('imgData').click();
+                },
+                video(){
+                  document.getElementById('uploadVideo').click();
+                },
+                link(){
+                  document.getElementById('uploadfile').click();
+                }
+              }
+          },
         },
         theme: 'snow', //主题，有两种，snow和bubble
         placeholder: '请输入',
@@ -164,14 +196,6 @@ export default {
         this.$emit('input', quill.container.firstChild.innerHTML)
 
       });
-
-      let toolbar = quill.getModule('toolbar');
-      toolbar.addHandler('image', () => {
-        document.getElementById('imgData').click();
-      });
-      toolbar.addHandler("video", ()=> {
-        document.getElementById('uploadVideo').click();
-      })
 
     },
     updateImg(e) {
@@ -253,6 +277,34 @@ export default {
       quill.pasteHTML('')
       setTimeout(()=> {
         quill.pasteHTML(this.initalValue)
+      })
+    },
+    fileUpload(e){
+      let fileInput = e.target;
+      let file = fileInput.files[0];
+      let filterFile = new File([file], file.name.replace(/\s/g, '')); 
+      var formData = new FormData();
+      formData.append('file', filterFile);        //追加的自定义节点，第一个参数：php用$_FILES接收时的key；第2个参数：当前图片
+
+      request({
+        url: '/backstage/minio/upload',
+        method: 'post',
+        data: formData,
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+      }).then(res=> {
+        const range = quill.getSelection();
+        if (range) {
+          quill.insertEmbed(range.index, 'link',
+            {
+              href: res.data.url,
+              innerText: res.data.name
+            }
+          );
+          const dt = new DataTransfer();
+          fileInput.files = dt.files
+        }
       })
     }
   },
