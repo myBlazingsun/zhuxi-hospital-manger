@@ -8,7 +8,7 @@
           v-loading="treeLoading"
           highlight-current
           :expand-on-click-node="false"
-          default-expand-all
+          :default-expand-all="false"
           :empty-text="emptyText"
           :data="treeData"
           :props="defaultProps"

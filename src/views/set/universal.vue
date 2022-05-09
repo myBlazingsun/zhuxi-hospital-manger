@@ -17,6 +17,15 @@
       <el-form-item label="微信公众号：" prop="wxQrCode">
         <single-upload v-model="detail.wxQrCode" style="width: 300px;display: inline-block;margin-left: 10px"></single-upload>
       </el-form-item>
+      <el-form-item label="微信公众号描述：" prop="wxQrCodeDesc">
+        <el-input v-model="detail.wxQrCodeDesc"></el-input>
+      </el-form-item>
+      <el-form-item label="微信公众号2：" prop="wxQrCodeTwo">
+        <single-upload v-model="detail.wxQrCodeTwo" style="width: 300px;display: inline-block;margin-left: 10px"></single-upload>
+      </el-form-item>
+      <el-form-item label="微信公众号2描述：" prop="copyRright">
+        <el-input v-model="detail.wxQrCodeTwoDesc"></el-input>
+      </el-form-item>
       <el-form-item label="友情链接：" prop="links">
         <ul class="shop-plats-ul">
           <li v-for="(item, i) in detail.links" :key="i">
@@ -52,6 +61,9 @@ const detaultDetail = {
   beianCode: null,
   copyRright: null,
   wxQrCode: null,
+  wxQrCodeDesc: null,
+  wxQrCodeTwo: null,
+  wxQrCodeTwoDesc: null,
   links: [{name: '', url: ''}],
 }
 
