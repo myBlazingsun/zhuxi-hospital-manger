@@ -220,7 +220,7 @@ const defaultDetail = {
   initalContent: '请输入内容',//初始内容值
   contentKeyword: null,//关键字
   contentImg: null,//缩略图
-  contentSort: null,
+  contentSort: 0,
   contentAuthor: null,//作者
 }
 export default {
