@@ -256,7 +256,7 @@ export default {
         },
         onUploadProgress(e){
             if(e.lengthComputable){
-                self.uploadProgress = ( e.loaded / e.total * 100 + '' ).substr(0, 5);
+                self.uploadProgress = ( e.loaded / e.total * 100 + '' ).substr(0, 5) + '%';
                 console.log('上传进度',e.loaded / e.total); //已上传的比例
             }
          },
