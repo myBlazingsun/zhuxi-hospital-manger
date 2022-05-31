@@ -1,11 +1,11 @@
 <template>
   <div class="editor-wrap" :id="id" ref="editor">
-    <div id="editor" class="showContent">
+    <div id="editor" class="showContent" element-loading-background="rgba(0, 0, 0, 0.8)" v-loading="uploadProgress" :element-loading-text="`上传中: ${uploadProgress}`">
       <!--回显的内容，库中查出来的放这-->
       <!--可以直接在指定元素内加入文本或者html标签-->
     </div>
-    <input type="file" @change="updateImg($event)" id="imgData" style="display: none;">
-    <input type="file" @change="fileUpload($event)" id="uploadfile" style="display: none;">
+    <input type="file" @change="updateImg($event)" accept=".jpg,.png,.jpeg" id="imgData" style="display: none;">
+    <input type="file" @change="fileUpload($event)" accept=".mp4,.MPEG4" id="uploadfile" style="display: none;">
     <input id="uploadVideo" type="file" style="display:none" accept="video/*" @change="uploadVideo">
   </div>
 </template>
@@ -91,7 +91,6 @@ FileBlot.tagName = 'A'
 Quill.register(FileBlot)
 
 import request from '@/utils/request'
-
 let quill;
 const id = 0;
 export default {
@@ -106,7 +105,8 @@ export default {
   },
   data() {
     return {
-      id: 'ue-' + this._uid
+      id: 'ue-' + this._uid,
+      uploadProgress: null,
     }
   },
   components: {
@@ -212,7 +212,7 @@ export default {
         data: formData,
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded'
-        }
+        },
       }).then(res=> {
         const range = quill.getSelection();
         if (range) {
@@ -238,22 +238,29 @@ export default {
       let fileInput = e.target;
       let file = fileInput.files[0];
       console.log(file.size);
-      if(file.size > 1024 * 1024 * 50){
-        this.$message.error('上传文件不可大于50M!')
+      if(file.size > 1024 * 1024 * 500){
+        this.$message.error('上传文件不可大于500M!')
         return
       }
       var formData = new FormData();
        let filterFile = new File([file], file.name.replace(/\s/g, '')); 
       var formData = new FormData();
       formData.append('file', filterFile);        //追加的自定义节点，第一个参数：php用$_FILES接收时的key；第2个参数：当前图片
-
+      const self = this;
       request({
         url: '/backstage/minio/upload',
         method: 'post',
         data: formData,
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded'
-        }
+        },
+        onUploadProgress(e){
+            if(e.lengthComputable){
+                self.uploadProgress = ( e.loaded / e.total * 100 + '' ).substr(0, 5);
+                console.log('上传进度',e.loaded / e.total); //已上传的比例
+            }
+         },
+         timeout: 1000 * 60 * 15
       }).then(res=> {
         const range = quill.getSelection();
         if (range) {
@@ -269,8 +276,13 @@ export default {
             height: '100%'
           }) //将上传好的图片，插入到富文本的range.index（当前光标处）
           const dt = new DataTransfer();
-          fileInput.files = dt.files
+          fileInput.files = dt.files;
+          self.uploadProgress = '';
         }
+      }).catch(err=> {
+        self.uploadProgress = '';
+      }).finally(()=> {
+        self.uploadProgress = '';
       })
     },
     setContent(){
@@ -305,6 +317,8 @@ export default {
           const dt = new DataTransfer();
           fileInput.files = dt.files
         }
+      }).catch(err=> {
+        this.$message.error(err.toString())
       })
     }
   },
