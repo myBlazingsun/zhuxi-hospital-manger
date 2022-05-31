@@ -180,7 +180,7 @@
         </el-col>
       </el-row>
         <el-form-item label="缩略图：" prop="contentImg" :class="[]">
-          <single-upload v-model="detail.contentImg" style="width: 300px;display: inline-block;margin-left: 10px"></single-upload>
+          <single-upload v-model="detail.contentImg" :type="''" style="width: 400px;display: inline-block;margin-left: 10px"></single-upload>
         </el-form-item>
         <el-form-item label="文章描述" prop="contentDescription">
           <el-input v-model="detail.contentDescription" :clearable="true" placeholder="请输入"></el-input>

@@ -15,11 +15,14 @@
       :accept="accept"
       :on-preview="handlePreview">
       <el-button size="small" type="primary">点击上传</el-button>
-      <div slot="tip" class="el-upload__tip">只能上传{{acceptFileType[type]}}文件，且不超过{{acceptSize[type]}}MB</div>
+      <div slot="tip" class="el-upload__tip">只能上传{{accept}}文件，且不超过{{acceptSize[type||'video']}}MB</div>
     </ElUpload>
-    <el-dialog :visible.sync="dialogVisible">
-      <img v-if="type=='img'" width="100%" :src="fileList[0].url" alt="">
-      <video controls v-else-if="type=='video'" width="100%"  :src="fileList[0].url"></video>
+    <el-dialog :visible.sync="dialogVisible" :append-to-body="true">
+      <div v-if="fileList.length">
+         <img v-if="type=='img'" width="100%" :src="fileList[0].url" alt="">
+        <video ref="video" controls v-else="type=='video'" width="100%"  :src="fileList[0].url"></video>
+      </div>
+     
     </el-dialog>
   </div>
 </template>
@@ -53,7 +56,7 @@
 
   export const acceptSize = {
     img: 10,
-    video: 50,
+    video: 500,
   } 
 
   export default {
@@ -81,20 +84,21 @@
         }
       },
       fileList() {
-        return [{
+        return this.value ? [{
           name: this.imageName,
           url: this.imageUrl
-        }]
+        }] : []
       },
       showFileList: {
         get: function () {
-          return this.value !== null && this.value !== ''&& this.value!==undefined;
+          return this.loading || ( this.value !== null && this.value !== ''&& this.value!==undefined );
         },
         set: function (newValue) {
+          
         }
       },
       accept(){
-        return this.type ? acceptFileType[this.type] : acceptFileType.img
+        return this.type ? acceptFileType[this.type] : (acceptFileType.img + ',' +acceptFileType.video)
       },
       fileType(){
 
@@ -114,10 +118,18 @@
           // callback:'',
         },
         dialogVisible: false,
+        loading: false,
         useOss: false, //使用oss->true;使用MinIO->false
         ossUploadUrl: 'http://macro-oss.oss-cn-shenzhen.aliyuncs.com',
         minioUploadUrl: baseURL + 'backstage/minio/upload',
       };
+    },
+    watch:{
+      dialogVisible(nval){
+        if(!nval && this.$refs.video){
+          this.$refs.video.pause();
+        }
+      }
     },
     methods: {
       emitInput(val) {
@@ -170,6 +182,7 @@
               e.percent = e.loaded / e.total * 100;
             }
             option.onProgress(e);
+            console.log(e.percent);
           };
         }
 
@@ -218,6 +231,8 @@
       beforeUpload(file) {
         let _self = this;
         // file.name = file.name.replace(/\s/g, '');
+        console.log('beforeupload');
+        this.loading = true;
         if(!this.useOss){
           //不使用oss不需要获取策略
           return true;
@@ -242,7 +257,6 @@
         })
       },
       async handleUploadSuccess(res, file) {
-        this.showFileList = true;
         this.fileList.pop();
         let url = this.dataObj.host + '/' + this.dataObj.dir + '/' + file.name;
         if(!this.useOss){
@@ -255,6 +269,7 @@
         }
         this.fileList.push({name: file.name, url: url, videoCoverImg, });
         this.emitInput(this.fileList[0].url);
+        this.loading = false;
       }
     }
   }
