@@ -263,7 +263,7 @@ export default {
             ...res.data
           }
           quill.insertEmbed(range.index, 'simpleVideo', {
-            url: 'http://8.143.199.43' + res.data.url,
+            url: res.data.url,
             controls: 'controls',
             width: '100%',
             height: '100%'
