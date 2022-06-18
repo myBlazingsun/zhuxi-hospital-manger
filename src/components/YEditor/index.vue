@@ -5,8 +5,8 @@
       <!--可以直接在指定元素内加入文本或者html标签-->
     </div>
     <input type="file" @change="updateImg($event)" accept=".jpg,.png,.jpeg" id="imgData" style="display: none;">
-    <input type="file" @change="fileUpload($event)" accept=".mp4,.MPEG4" id="uploadfile" style="display: none;">
-    <input id="uploadVideo" type="file" style="display:none" accept="video/*" @change="uploadVideo">
+    <input type="file" @change="fileUpload($event)" id="uploadfile" style="display: none;">
+    <input type="file" @change="uploadVideo" id="uploadVideo" style="display:none" accept="video/*">
   </div>
 </template>
 
@@ -198,6 +198,7 @@ export default {
       });
 
     },
+    //上传图片
     updateImg(e) {
       let fileInput = e.target;
       let file = fileInput.files[0];
@@ -234,6 +235,7 @@ export default {
         }
       })
     },
+    //上传视频
     uploadVideo(e) {
       let fileInput = e.target;
       let file = fileInput.files[0];
@@ -291,6 +293,7 @@ export default {
         quill.pasteHTML(this.initalValue)
       })
     },
+    //上传文件
     fileUpload(e){
       let fileInput = e.target;
       let file = fileInput.files[0];

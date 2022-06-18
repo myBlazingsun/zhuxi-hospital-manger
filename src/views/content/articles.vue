@@ -297,7 +297,6 @@ export default {
         ],
         contentDetails:  [
           {required: true, trigger: 'blur', message: '请输入详情'},
-          {min: 2, max: 5000, message: '长度在 2 到 1000 个字符', trigger: 'blur'}
         ],
       },
       dialogVisible: false,
