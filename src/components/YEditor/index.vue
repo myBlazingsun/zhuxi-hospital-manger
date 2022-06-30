@@ -107,6 +107,7 @@ export default {
     return {
       id: 'ue-' + this._uid,
       uploadProgress: null,
+      history: []
     }
   },
   components: {
@@ -116,6 +117,7 @@ export default {
     initalValue: {
       handler(nval) {
         this.$nextTick(()=> {
+          this.history = [];
           this.setContent()
         })
       },
@@ -130,6 +132,7 @@ export default {
   },
   methods: {
     init() {
+      const self = this;
       /* 编辑器操作条选项 */
       var toolbarOptions = [
         ['bold', 'italic', 'underline', 'strike'], //开关按钮
@@ -146,9 +149,7 @@ export default {
         [{ 'align': [] }],
         ['clean'], //移除格式化
         ["image", "video","link"],
-        // ['image'],
-        // ['video'],
-        // ["upload"],
+        ['revoke'],//, 'restore'
         // ['formula'] //需要加载cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.js
       ];
 
@@ -170,6 +171,24 @@ export default {
                 },
                 link(){
                   document.getElementById('uploadfile').click();
+                },
+                restore: ()=> {
+                  let history = self.history[0]
+                  self.history = []
+                  quill.pasteHTML(history)
+                  this.$nextTick(function () {
+                    quill.blur()
+                  })
+                },
+                revoke:()=> {
+                  if (self.history.length > 1) {
+                    let history = self.history.pop()
+                    history = self.history.pop()
+                    quill.pasteHTML(history)
+                    self.$nextTick(function () {
+                      quill.blur()
+                    })
+                  }
                 }
               }
           },
@@ -194,9 +213,12 @@ export default {
       /* 事件的绑定；注意：text-change这个获取值放这的话是编辑器内容发生改变的时候才能获取到值,如果想每次提交都有值，要放到提交那 */
       quill.on('text-change', (delta, oldDelta, source)=> {
         this.$emit('input', quill.container.firstChild.innerHTML)
-
+        this.history.push(quill.container.firstChild.innerHTML)
+        console.log('tc');
       });
-
+      quill.on('editor-change', ()=> {
+        console.log('ec');
+      })
     },
     //上传图片
     updateImg(e) {
@@ -335,7 +357,21 @@ export default {
 .editor-wrap{
   #editor{
     height: 400px;
+    
   }
+  .ql-toolbar {
+      .ql-revoke, .ql-restore{
+        font-family: "iconfont";
+        font-size: 20px;
+        line-height: 14px;
+      }
+      .ql-revoke::after{
+        content: '\e609';
+      }
+      .ql-restore::before{
+        content: '\e657';
+      }
+    }
 }
 
 </style>

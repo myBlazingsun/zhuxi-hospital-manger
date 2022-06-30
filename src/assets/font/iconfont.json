@@ -1,0 +1,156 @@
+{
+  "id": "3127268",
+  "name": "yalu-mall",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "雅鹿服饰官网",
+  "glyphs": [
+    {
+      "icon_id": "9745441",
+      "name": "restore",
+      "font_class": "restore",
+      "unicode": "e657",
+      "unicode_decimal": 58967
+    },
+    {
+      "icon_id": "18542395",
+      "name": "back",
+      "font_class": "back1",
+      "unicode": "e612",
+      "unicode_decimal": 58898
+    },
+    {
+      "icon_id": "20113701",
+      "name": "bxs-right-arrow",
+      "font_class": "bxs-right-arrow",
+      "unicode": "e6d5",
+      "unicode_decimal": 59093
+    },
+    {
+      "icon_id": "18166694",
+      "name": "抖音",
+      "font_class": "douyin",
+      "unicode": "e8db",
+      "unicode_decimal": 59611
+    },
+    {
+      "icon_id": "18166712",
+      "name": "快手",
+      "font_class": "kuaishou",
+      "unicode": "e8dc",
+      "unicode_decimal": 59612
+    },
+    {
+      "icon_id": "577334",
+      "name": "店铺",
+      "font_class": "dianpu",
+      "unicode": "e736",
+      "unicode_decimal": 59190
+    },
+    {
+      "icon_id": "7409538",
+      "name": "filter",
+      "font_class": "filter",
+      "unicode": "e69e",
+      "unicode_decimal": 59038
+    },
+    {
+      "icon_id": "11348890",
+      "name": "back",
+      "font_class": "back",
+      "unicode": "e609",
+      "unicode_decimal": 58889
+    },
+    {
+      "icon_id": "1176911",
+      "name": "home",
+      "font_class": "home",
+      "unicode": "e6ee",
+      "unicode_decimal": 59118
+    },
+    {
+      "icon_id": "1883238",
+      "name": "商品类别",
+      "font_class": "category",
+      "unicode": "e622",
+      "unicode_decimal": 58914
+    },
+    {
+      "icon_id": "3878676",
+      "name": "新闻",
+      "font_class": "news",
+      "unicode": "e617",
+      "unicode_decimal": 58903
+    },
+    {
+      "icon_id": "4784097",
+      "name": "历史",
+      "font_class": "history",
+      "unicode": "e654",
+      "unicode_decimal": 58964
+    },
+    {
+      "icon_id": "4893862",
+      "name": "轮询",
+      "font_class": "carousel",
+      "unicode": "e62c",
+      "unicode_decimal": 58924
+    },
+    {
+      "icon_id": "9770416",
+      "name": "overview",
+      "font_class": "overview",
+      "unicode": "e697",
+      "unicode_decimal": 59031
+    },
+    {
+      "icon_id": "11903726",
+      "name": "setting",
+      "font_class": "set",
+      "unicode": "e660",
+      "unicode_decimal": 58976
+    },
+    {
+      "icon_id": "16728169",
+      "name": "服务",
+      "font_class": "csr",
+      "unicode": "e70f",
+      "unicode_decimal": 59151
+    },
+    {
+      "icon_id": "15838431",
+      "name": "arrow-right",
+      "font_class": "arrow-right",
+      "unicode": "e665",
+      "unicode_decimal": 58981
+    },
+    {
+      "icon_id": "10971945",
+      "name": "close",
+      "font_class": "close",
+      "unicode": "e67e",
+      "unicode_decimal": 59006
+    },
+    {
+      "icon_id": "77156",
+      "name": "微信",
+      "font_class": "weixin",
+      "unicode": "e600",
+      "unicode_decimal": 58880
+    },
+    {
+      "icon_id": "4936987",
+      "name": "weibo",
+      "font_class": "weibo",
+      "unicode": "e882",
+      "unicode_decimal": 59522
+    },
+    {
+      "icon_id": "6151301",
+      "name": "search",
+      "font_class": "search",
+      "unicode": "e82e",
+      "unicode_decimal": 59438
+    }
+  ]
+}

@@ -329,7 +329,6 @@ export default {
     },
     editorChange(contentHmtl, eventName) {
       this.detail.contentDetails = contentHmtl;
-      console.log(eventName);
     },
     getTreeList: function () {
       this.treeLoading = true;
