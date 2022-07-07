@@ -137,15 +137,15 @@ export default {
       var toolbarOptions = [
         ['bold', 'italic', 'underline', 'strike'], //开关按钮
         ['blockquote', 'code-block'],
-        [{ 'header': 1 }, { 'header': 2 }], //自定义按钮值
-        [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+        // [{ 'header': 1 }, { 'header': 2 }], //自定义按钮值
+        // [{ 'list': 'ordered' }, { 'list': 'bullet' }],
         // [{ 'script': 'sub' }, { 'script': 'super' }], // 上标/下标
         [{ 'indent': '-1' }, { 'indent': '+1' }], // 减少缩进/缩进
-        [{ 'direction': 'rtl' }], // 文本方向
+        // [{ 'direction': 'rtl' }], // 文本方向
         [{ 'size': ['small', false, 'large', 'huge'] }], // 自定义下拉
-        [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+        // [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
         [{ 'color': [] }, { 'background': [] }], //使用主题的默认下拉
-        [{ 'font': [] }],
+        // [{ 'font': [] }],
         [{ 'align': [] }],
         ['clean'], //移除格式化
         ["image", "video","link"],
@@ -310,9 +310,9 @@ export default {
       })
     },
     setContent(){
-      quill.pasteHTML('')
+      quill && quill.pasteHTML('')
       setTimeout(()=> {
-        quill.pasteHTML(this.initalValue)
+        quill && quill.pasteHTML(this.initalValue)
       })
     },
     //上传文件

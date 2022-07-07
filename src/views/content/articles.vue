@@ -125,7 +125,7 @@
     </div>
 
     <el-dialog :close-on-click-modal="false" :title="(isEdit ? '编辑': '新增') + '文章'" :visible.sync="dialogVisible" width="900">
-      <el-form :model="detail" ref="form" :rules="formRules" label-width="150px" size="small" >
+      <el-form v-loading="loading" :model="detail" ref="form" :rules="formRules" label-width="150px" size="small" >
         <el-row>
           <el-col :span="12">
              <el-form-item label="文章标题" prop="contentTitle">
@@ -300,6 +300,7 @@ export default {
         ],
       },
       dialogVisible: false,
+      loading: false,
     };
   },
   created() {
@@ -371,6 +372,7 @@ export default {
     handleUpdate(index, row) {
       this.dialogVisible = true;
       this.isEdit = true;
+      this.loading = true;
       getArticlesById(row.id).then(res=> {
         this.detail = Object.assign({}, {
           ...res.data,
@@ -379,6 +381,8 @@ export default {
         this.$nextTick(()=> {
           this.$refs.form.clearValidate()
         })
+      }).finally(()=> {
+        this.loading = false;
       })
     },
     handleBatchOperate() {
