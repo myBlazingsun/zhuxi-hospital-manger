@@ -1,6 +1,6 @@
 <template>
   <div class="editor-wrap" :id="id" ref="editor">
-    <div id="editor" class="showContent" element-loading-background="rgba(0, 0, 0, 0.8)" v-loading="uploadProgress" :element-loading-text="`上传中: ${uploadProgress}`">
+    <div id="editor" ref="editorEle" class="showContent" element-loading-background="rgba(0, 0, 0, 0.8)" v-loading="uploadProgress" :element-loading-text="`上传中: ${uploadProgress}`">
       <!--回显的内容，库中查出来的放这-->
       <!--可以直接在指定元素内加入文本或者html标签-->
     </div>
@@ -125,7 +125,6 @@ export default {
     }
   },
   mounted() {
-    console.log(this);
     this.$nextTick(() => {
       this.init()
     })
@@ -311,9 +310,12 @@ export default {
     },
     setContent(){
       quill && quill.pasteHTML('')
+      const self = this;
+      
       setTimeout(()=> {
-        quill && quill.pasteHTML(this.initalValue)
+        quill && quill.root && (quill.root.innerHTML = self.initalValue);
       })
+      
     },
     //上传文件
     fileUpload(e){
